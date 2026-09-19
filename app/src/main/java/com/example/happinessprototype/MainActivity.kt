@@ -1,0 +1,17 @@
+package com.example.happinessprototype
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import com.example.happinessprototype.ui.screens.home.HomeScreen
+
+class MainActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            HomeScreen()
+        }
+    }
+}
