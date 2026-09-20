@@ -1,6 +1,5 @@
 package com.example.happinessprototype.ui.screens.home
 
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -40,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 private val Background = Color(0xFFF7FBFC)
 private val PrimaryBlue = Color(0xFF3B82F6)
 private val DarkText = Color(0xFF172554)
@@ -49,14 +51,27 @@ private val SoftBlue = Color(0xFFEAF4FF)
 private val SoftGreen = Color(0xFFEAF8F1)
 private val SoftYellow = Color(0xFFFFF7DF)
 private val SoftPurple = Color(0xFFF3EEFF)
+
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onMoodClick: () -> Unit = {},
+    onWellnessClick: () -> Unit = {},
+    onJournalClick: () -> Unit = {},
+    onCommunityClick: () -> Unit = {},
+    onRewardsClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {}
+) {
 
     Scaffold(
         containerColor = Background,
 
         bottomBar = {
-            HomeBottomNavigation()
+            HomeBottomNavigation(
+                onWellnessClick = onWellnessClick,
+                onJournalClick = onJournalClick,
+                onCommunityClick = onCommunityClick,
+                onRewardsClick = onRewardsClick
+            )
         }
 
     ) { paddingValues ->
@@ -77,7 +92,9 @@ fun HomeScreen() {
         ) {
 
             item {
-                Header()
+                Header(
+                    onProfileClick = onProfileClick
+                )
             }
 
             item {
@@ -96,7 +113,8 @@ fun HomeScreen() {
                     icon = "😊",
                     title = "How are you feeling?",
                     description = "Take a moment to check in with yourself.",
-                    background = SoftYellow
+                    background = SoftYellow,
+                    onClick = onMoodClick
                 )
             }
 
@@ -105,7 +123,8 @@ fun HomeScreen() {
                     icon = "🌿",
                     title = "Today's Activity",
                     description = "A small activity can make a big difference.",
-                    background = SoftGreen
+                    background = SoftGreen,
+                    onClick = onWellnessClick
                 )
             }
 
@@ -121,14 +140,18 @@ fun HomeScreen() {
                     icon = "🌙",
                     title = "Journal your thoughts",
                     description = "Write down what's on your mind.",
-                    background = SoftPurple
+                    background = SoftPurple,
+                    onClick = onJournalClick
                 )
             }
         }
     }
 }
+
 @Composable
-private fun Header() {
+private fun Header(
+    onProfileClick: () -> Unit
+) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -178,6 +201,9 @@ private fun Header() {
                     .size(44.dp)
                     .clip(CircleShape)
                     .background(SoftBlue)
+                    .clickable {
+                        onProfileClick()
+                    }
                     .wrapContentSize(Alignment.Center),
 
                 color = PrimaryBlue,
@@ -186,6 +212,7 @@ private fun Header() {
         }
     }
 }
+
 @Composable
 private fun HappinessCard() {
 
@@ -269,6 +296,7 @@ private fun HappinessCard() {
         }
     }
 }
+
 @Composable
 private fun SectionTitle(
     title: String,
@@ -295,18 +323,22 @@ private fun SectionTitle(
         )
     }
 }
+
 @Composable
 private fun WellnessCard(
     icon: String,
     title: String,
     description: String,
-    background: Color
+    background: Color,
+    onClick: () -> Unit = {}
 ) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { },
+            .clickable {
+                onClick()
+            },
 
         shape = RoundedCornerShape(22.dp),
 
@@ -372,8 +404,14 @@ private fun WellnessCard(
         }
     }
 }
+
 @Composable
-private fun HomeBottomNavigation() {
+private fun HomeBottomNavigation(
+    onWellnessClick: () -> Unit,
+    onJournalClick: () -> Unit,
+    onCommunityClick: () -> Unit,
+    onRewardsClick: () -> Unit
+) {
 
     NavigationBar(
         containerColor = Color.White
@@ -395,7 +433,7 @@ private fun HomeBottomNavigation() {
 
         NavigationBarItem(
             selected = false,
-            onClick = {},
+            onClick = onWellnessClick,
             icon = {
                 Icon(
                     Icons.Default.Favorite,
@@ -409,7 +447,7 @@ private fun HomeBottomNavigation() {
 
         NavigationBarItem(
             selected = false,
-            onClick = {},
+            onClick = onJournalClick,
             icon = {
                 Icon(
                     Icons.Default.Edit,
@@ -423,7 +461,7 @@ private fun HomeBottomNavigation() {
 
         NavigationBarItem(
             selected = false,
-            onClick = {},
+            onClick = onCommunityClick,
             icon = {
                 Icon(
                     Icons.Default.People,
@@ -437,7 +475,7 @@ private fun HomeBottomNavigation() {
 
         NavigationBarItem(
             selected = false,
-            onClick = {},
+            onClick = onRewardsClick,
             icon = {
                 Icon(
                     Icons.Default.Star,

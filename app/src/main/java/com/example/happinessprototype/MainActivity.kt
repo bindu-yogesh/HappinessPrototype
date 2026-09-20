@@ -3,7 +3,7 @@ package com.example.happinessprototype
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.happinessprototype.ui.screens.home.HomeScreen
+import com.example.happinessprototype.ui.navigation.AppNavigation
 
 class MainActivity : ComponentActivity() {
 
@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            HomeScreen()
+            AppNavigation()
         }
     }
 }
