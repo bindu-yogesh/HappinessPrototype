@@ -3,6 +3,7 @@ package com.example.happinessprototype.ui.screens.progress
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,246 +36,414 @@ private val Background = Color(0xFFF7FBFC)
 private val PrimaryBlue = Color(0xFF3B82F6)
 private val DarkText = Color(0xFF172554)
 private val GrayText = Color(0xFF64748B)
+
 private val SoftBlue = Color(0xFFEAF4FF)
 private val SoftGreen = Color(0xFFEAF8F1)
 private val SoftYellow = Color(0xFFFFF7DF)
+private val SoftPurple = Color(0xFFF3EEFF)
 
 @Composable
 fun ProgressScreen(
     onBack: () -> Unit = {}
 ) {
-
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Background)
+            .background(Background),
+        contentPadding = PaddingValues(
+            start = 20.dp,
+            end = 20.dp,
+            bottom = 30.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
 
         // Top bar
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        item {
 
-            IconButton(onClick = onBack) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-                    tint = DarkText
-                )
-            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 10.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-            Text(
-                text = "Your Progress",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = DarkText
-            )
-        }
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(
-                start = 20.dp,
-                end = 20.dp,
-                bottom = 30.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ) {
-
-            item {
-
-                Spacer(modifier = Modifier.height(10.dp))
+                IconButton(
+                    onClick = onBack
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = DarkText
+                    )
+                }
 
                 Text(
-                    text = "Your happiness journey 💙",
+                    text = "My Progress",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = DarkText
+                )
+            }
+        }
+
+        // Heading
+        item {
+
+            Column {
+
+                Text(
+                    text = "Your Happiness Journey 🌱",
                     fontSize = 27.sp,
                     fontWeight = FontWeight.Bold,
                     color = DarkText
                 )
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(
+                    modifier = Modifier.height(6.dp)
+                )
 
                 Text(
-                    text = "Small steps are creating positive changes.",
+                    text = "Small steps every day can make a big difference.",
                     fontSize = 14.sp,
                     color = GrayText
                 )
             }
+        }
 
-            // Happiness score
-            item {
+        // Happiness score
+        item {
 
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(26.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 2.dp
-                    )
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(26.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                ),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 2.dp
+                )
+            ) {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Row(
+                    Text(
+                        text = "Current Happiness",
+                        fontSize = 15.sp,
+                        color = GrayText
+                    )
+
+                    Spacer(
+                        modifier = Modifier.height(12.dp)
+                    )
+
+                    Text(
+                        text = "78",
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(22.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                            .size(120.dp)
+                            .clip(CircleShape)
+                            .background(SoftBlue)
+                            .padding(30.dp),
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = PrimaryBlue
+                    )
 
-                        Column(
-                            modifier = Modifier.weight(1f)
-                        ) {
+                    Spacer(
+                        modifier = Modifier.height(12.dp)
+                    )
 
-                            Text(
-                                text = "Happiness Score",
-                                fontSize = 15.sp,
-                                color = GrayText
-                            )
+                    Text(
+                        text = "You're doing great! 💙",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = DarkText
+                    )
 
-                            Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(
+                        modifier = Modifier.height(5.dp)
+                    )
 
-                            Row(
-                                verticalAlignment = Alignment.Bottom
-                            ) {
-
-                                Text(
-                                    text = "78",
-                                    fontSize = 42.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = PrimaryBlue
-                                )
-
-                                Text(
-                                    text = " / 100",
-                                    fontSize = 14.sp,
-                                    color = GrayText
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                            Text(
-                                text = "+8% from last week",
-                                fontSize = 13.sp,
-                                color = Color(0xFF16A34A)
-                            )
-                        }
-
-                        Text(
-                            text = "78%",
-                            modifier = Modifier
-                                .size(78.dp)
-                                .clip(CircleShape)
-                                .background(SoftBlue)
-                                .padding(22.dp),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = PrimaryBlue
-                        )
-                    }
+                    Text(
+                        text = "Keep taking care of yourself.",
+                        fontSize = 13.sp,
+                        color = GrayText
+                    )
                 }
             }
+        }
 
-            // Weekly mood
-            item {
+        // Weekly overview
+        item {
 
-                Text(
-                    text = "Weekly Mood",
-                    fontSize = 21.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = DarkText
+            Text(
+                text = "Weekly Overview",
+                fontSize = 21.sp,
+                fontWeight = FontWeight.Bold,
+                color = DarkText
+            )
+        }
+
+        item {
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                )
+            ) {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                ) {
+
+                    Text(
+                        text = "This Week",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = DarkText
+                    )
+
+                    Spacer(
+                        modifier = Modifier.height(18.dp)
+                    )
+
+                    WeeklyMoodRow(
+                        day = "Mon",
+                        score = 72
+                    )
+
+                    WeeklyMoodRow(
+                        day = "Tue",
+                        score = 80
+                    )
+
+                    WeeklyMoodRow(
+                        day = "Wed",
+                        score = 68
+                    )
+
+                    WeeklyMoodRow(
+                        day = "Thu",
+                        score = 84
+                    )
+
+                    WeeklyMoodRow(
+                        day = "Fri",
+                        score = 76
+                    )
+
+                    WeeklyMoodRow(
+                        day = "Sat",
+                        score = 82
+                    )
+
+                    WeeklyMoodRow(
+                        day = "Sun",
+                        score = 78
+                    )
+                }
+            }
+        }
+
+        // Statistics
+        item {
+
+            Text(
+                text = "Your Statistics",
+                fontSize = 21.sp,
+                fontWeight = FontWeight.Bold,
+                color = DarkText
+            )
+        }
+
+        item {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+                ProgressStatCard(
+                    modifier = Modifier.weight(1f),
+                    value = "7",
+                    title = "Day Streak",
+                    icon = "🔥",
+                    background = SoftYellow
+                )
+
+                ProgressStatCard(
+                    modifier = Modifier.weight(1f),
+                    value = "24",
+                    title = "Activities",
+                    icon = "🌱",
+                    background = SoftGreen
                 )
             }
+        }
 
-            item {
+        // Weekly average
+        item {
 
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(22.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    )
-                ) {
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                horizontal = 15.dp,
-                                vertical = 22.dp
-                            ),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-
-                        MoodDay("Mon", "😊", true)
-                        MoodDay("Tue", "🙂", true)
-                        MoodDay("Wed", "😄", true)
-                        MoodDay("Thu", "🙂", true)
-                        MoodDay("Fri", "😐", true)
-                        MoodDay("Sat", "😄", true)
-                        MoodDay("Sun", "😊", true)
-                    }
-                }
-            }
-
-            // Streak
-            item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = SoftPurple
+                )
+            ) {
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    StatCard(
-                        modifier = Modifier.weight(1f),
-                        emoji = "🔥",
-                        value = "7",
-                        title = "Day Streak",
-                        background = SoftYellow
+                    Text(
+                        text = "📈",
+                        fontSize = 32.sp
                     )
 
-                    StatCard(
-                        modifier = Modifier.weight(1f),
-                        emoji = "🌱",
-                        value = "24",
-                        title = "Activities",
-                        background = SoftGreen
+                    Spacer(
+                        modifier = Modifier.width(15.dp)
                     )
-                }
-            }
-
-            // Positive habits
-            item {
-
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(22.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    )
-                ) {
 
                     Column(
-                        modifier = Modifier.padding(20.dp)
+                        modifier = Modifier.weight(1f)
                     ) {
 
                         Text(
-                            text = "Positive Habits",
-                            fontSize = 19.sp,
-                            fontWeight = FontWeight.Bold,
+                            text = "Weekly Average",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
                             color = DarkText
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(
+                            modifier = Modifier.height(3.dp)
+                        )
 
-                        HabitRow("🧘", "Mindfulness", "5 sessions")
-                        HabitRow("🚶", "Movement", "4 sessions")
-                        HabitRow("📔", "Journaling", "6 entries")
+                        Text(
+                            text = "77 / 100",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = PrimaryBlue
+                        )
+
+                        Text(
+                            text = "You're maintaining a positive trend.",
+                            fontSize = 12.sp,
+                            color = GrayText
+                        )
                     }
+                }
+            }
+        }
+
+        // Positive habits
+        item {
+
+            Text(
+                text = "Positive Habits",
+                fontSize = 21.sp,
+                fontWeight = FontWeight.Bold,
+                color = DarkText
+            )
+        }
+
+        item {
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                )
+            ) {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                ) {
+
+                    HabitRow(
+                        icon = "🧘",
+                        title = "Mindfulness",
+                        progress = 0.8f,
+                        percentage = "80%"
+                    )
+
+                    Spacer(
+                        modifier = Modifier.height(18.dp)
+                    )
+
+                    HabitRow(
+                        icon = "📔",
+                        title = "Journaling",
+                        progress = 0.65f,
+                        percentage = "65%"
+                    )
+
+                    Spacer(
+                        modifier = Modifier.height(18.dp)
+                    )
+
+                    HabitRow(
+                        icon = "🌿",
+                        title = "Wellness Activities",
+                        progress = 0.75f,
+                        percentage = "75%"
+                    )
+                }
+            }
+        }
+
+        // Encouragement
+        item {
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = SoftBlue
+                )
+            ) {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(22.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Text(
+                        text = "Keep Going! 🌟",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = DarkText
+                    )
+
+                    Spacer(
+                        modifier = Modifier.height(6.dp)
+                    )
+
+                    Text(
+                        text = "Every small step towards your wellbeing matters.",
+                        fontSize = 13.sp,
+                        color = GrayText
+                    )
                 }
             }
         }
@@ -281,37 +451,62 @@ fun ProgressScreen(
 }
 
 @Composable
-private fun MoodDay(
+private fun WeeklyMoodRow(
     day: String,
-    emoji: String,
-    completed: Boolean
+    score: Int
 ) {
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = 6.dp
+            )
     ) {
 
-        Text(
-            text = emoji,
-            fontSize = 24.sp
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-        Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = day,
+                modifier = Modifier.width(40.dp),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = DarkText
+            )
 
-        Text(
-            text = day,
-            fontSize = 11.sp,
-            color = if (completed) DarkText else GrayText
-        )
+            LinearProgressIndicator(
+                progress = { score / 100f },
+                modifier = Modifier
+                    .weight(1f)
+                    .height(8.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                color = PrimaryBlue,
+                trackColor = Color(0xFFE8EEF5)
+            )
+
+            Spacer(
+                modifier = Modifier.width(10.dp)
+            )
+
+            Text(
+                text = score.toString(),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                color = GrayText
+            )
+        }
     }
 }
 
 @Composable
-private fun StatCard(
+private fun ProgressStatCard(
     modifier: Modifier,
-    emoji: String,
     value: String,
     title: String,
+    icon: String,
     background: Color
 ) {
 
@@ -326,26 +521,29 @@ private fun StatCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(18.dp)
+                .padding(18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
-                text = emoji,
+                text = icon,
                 fontSize = 25.sp
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(
+                modifier = Modifier.height(6.dp)
+            )
 
             Text(
                 text = value,
-                fontSize = 26.sp,
+                fontSize = 25.sp,
                 fontWeight = FontWeight.Bold,
                 color = DarkText
             )
 
             Text(
                 text = title,
-                fontSize = 12.sp,
+                fontSize = 11.sp,
                 color = GrayText
             )
         }
@@ -354,38 +552,61 @@ private fun StatCard(
 
 @Composable
 private fun HabitRow(
-    emoji: String,
+    icon: String,
     title: String,
-    subtitle: String
+    progress: Float,
+    percentage: String
 ) {
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 7.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
         Text(
-            text = emoji,
-            fontSize = 22.sp
+            text = icon,
+            fontSize = 24.sp
         )
 
-        Spacer(modifier = Modifier.width(14.dp))
+        Spacer(
+            modifier = Modifier.width(12.dp)
+        )
 
-        Column {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
 
-            Text(
-                text = title,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = DarkText
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Text(
+                    text = title,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = DarkText
+                )
+
+                Text(
+                    text = percentage,
+                    fontSize = 12.sp,
+                    color = GrayText
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(7.dp)
             )
 
-            Text(
-                text = subtitle,
-                fontSize = 12.sp,
-                color = GrayText
+            LinearProgressIndicator(
+                progress = { progress },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(7.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                color = PrimaryBlue,
+                trackColor = Color(0xFFE8EEF5)
             )
         }
     }
