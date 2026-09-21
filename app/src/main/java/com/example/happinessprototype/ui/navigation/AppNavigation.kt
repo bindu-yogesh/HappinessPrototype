@@ -55,8 +55,6 @@ fun AppNavigation(
     navController: NavHostController = rememberNavController()
 ) {
 
-    // Stores the current happiness score.
-    // Default score is 78.
     var happinessScore by remember {
         mutableIntStateOf(78)
     }
@@ -97,7 +95,9 @@ fun AppNavigation(
 
     Scaffold(
         bottomBar = {
+
             if (showBottomBar) {
+
                 NavigationBar {
 
                     bottomNavItems.forEach { item ->
@@ -106,7 +106,9 @@ fun AppNavigation(
                             selected = currentRoute == item.route,
 
                             onClick = {
+
                                 navController.navigate(item.route) {
+
                                     popUpTo(Routes.HOME) {
                                         saveState = true
                                     }
@@ -117,6 +119,7 @@ fun AppNavigation(
                             },
 
                             icon = {
+
                                 when (item.route) {
 
                                     Routes.HOME -> {
@@ -217,10 +220,8 @@ fun AppNavigation(
 
                     onMoodSelected = { score, _ ->
 
-                        // Update happiness score
                         happinessScore = score
 
-                        // Go back to Home
                         navController.popBackStack()
                     }
                 )
@@ -250,6 +251,8 @@ fun AppNavigation(
             composable(Routes.PROGRESS) {
 
                 ProgressScreen(
+                    happinessScore = happinessScore,
+
                     onBack = {
                         navController.popBackStack()
                     }

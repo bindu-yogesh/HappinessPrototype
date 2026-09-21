@@ -44,8 +44,17 @@ private val SoftPurple = Color(0xFFF3EEFF)
 
 @Composable
 fun ProgressScreen(
+    happinessScore: Int = 78,
     onBack: () -> Unit = {}
 ) {
+    val progressMessage = when {
+        happinessScore >= 90 -> "You're feeling amazing! Keep it going! 🌟"
+        happinessScore >= 75 -> "You're doing great! Keep taking care of yourself. 💙"
+        happinessScore >= 60 -> "You're having a good day. Keep going! 🌿"
+        happinessScore >= 45 -> "Take some time to care for yourself today. 💙"
+        else -> "It's okay to have difficult days. Be kind to yourself. 💙"
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -58,18 +67,13 @@ fun ProgressScreen(
         verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
 
-        // Top bar
         item {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(
-                        top = 10.dp
-                    ),
+                    .padding(top = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
                 IconButton(
                     onClick = onBack
                 ) {
@@ -89,11 +93,8 @@ fun ProgressScreen(
             }
         }
 
-        // Heading
         item {
-
             Column {
-
                 Text(
                     text = "Your Happiness Journey 🌱",
                     fontSize = 27.sp,
@@ -113,9 +114,8 @@ fun ProgressScreen(
             }
         }
 
-        // Happiness score
+        // Current happiness score
         item {
-
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(26.dp),
@@ -126,7 +126,6 @@ fun ProgressScreen(
                     defaultElevation = 2.dp
                 )
             ) {
-
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -145,7 +144,7 @@ fun ProgressScreen(
                     )
 
                     Text(
-                        text = "78",
+                        text = happinessScore.toString(),
                         modifier = Modifier
                             .size(120.dp)
                             .clip(CircleShape)
@@ -161,20 +160,10 @@ fun ProgressScreen(
                     )
 
                     Text(
-                        text = "You're doing great! 💙",
+                        text = progressMessage,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = DarkText
-                    )
-
-                    Spacer(
-                        modifier = Modifier.height(5.dp)
-                    )
-
-                    Text(
-                        text = "Keep taking care of yourself.",
-                        fontSize = 13.sp,
-                        color = GrayText
                     )
                 }
             }
@@ -182,7 +171,6 @@ fun ProgressScreen(
 
         // Weekly overview
         item {
-
             Text(
                 text = "Weekly Overview",
                 fontSize = 21.sp,
@@ -192,7 +180,6 @@ fun ProgressScreen(
         }
 
         item {
-
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
@@ -200,7 +187,6 @@ fun ProgressScreen(
                     containerColor = Color.White
                 )
             ) {
-
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -218,47 +204,21 @@ fun ProgressScreen(
                         modifier = Modifier.height(18.dp)
                     )
 
-                    WeeklyMoodRow(
-                        day = "Mon",
-                        score = 72
-                    )
+                    WeeklyMoodRow("Mon", 72)
+                    WeeklyMoodRow("Tue", 80)
+                    WeeklyMoodRow("Wed", 68)
+                    WeeklyMoodRow("Thu", 84)
+                    WeeklyMoodRow("Fri", 76)
+                    WeeklyMoodRow("Sat", 82)
 
-                    WeeklyMoodRow(
-                        day = "Tue",
-                        score = 80
-                    )
-
-                    WeeklyMoodRow(
-                        day = "Wed",
-                        score = 68
-                    )
-
-                    WeeklyMoodRow(
-                        day = "Thu",
-                        score = 84
-                    )
-
-                    WeeklyMoodRow(
-                        day = "Fri",
-                        score = 76
-                    )
-
-                    WeeklyMoodRow(
-                        day = "Sat",
-                        score = 82
-                    )
-
-                    WeeklyMoodRow(
-                        day = "Sun",
-                        score = 78
-                    )
+                    // Today's score comes from Mood Check-in
+                    WeeklyMoodRow("Today", happinessScore)
                 }
             }
         }
 
         // Statistics
         item {
-
             Text(
                 text = "Your Statistics",
                 fontSize = 21.sp,
@@ -268,7 +228,6 @@ fun ProgressScreen(
         }
 
         item {
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -294,7 +253,6 @@ fun ProgressScreen(
 
         // Weekly average
         item {
-
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(22.dp),
@@ -302,7 +260,6 @@ fun ProgressScreen(
                     containerColor = SoftPurple
                 )
             ) {
-
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -324,7 +281,7 @@ fun ProgressScreen(
                     ) {
 
                         Text(
-                            text = "Weekly Average",
+                            text = "Current Score",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = DarkText
@@ -335,14 +292,14 @@ fun ProgressScreen(
                         )
 
                         Text(
-                            text = "77 / 100",
+                            text = "$happinessScore / 100",
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = PrimaryBlue
                         )
 
                         Text(
-                            text = "You're maintaining a positive trend.",
+                            text = "Based on your latest mood check-in.",
                             fontSize = 12.sp,
                             color = GrayText
                         )
@@ -353,7 +310,6 @@ fun ProgressScreen(
 
         // Positive habits
         item {
-
             Text(
                 text = "Positive Habits",
                 fontSize = 21.sp,
@@ -363,7 +319,6 @@ fun ProgressScreen(
         }
 
         item {
-
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
@@ -371,7 +326,6 @@ fun ProgressScreen(
                     containerColor = Color.White
                 )
             ) {
-
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -412,7 +366,6 @@ fun ProgressScreen(
 
         // Encouragement
         item {
-
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
@@ -420,7 +373,6 @@ fun ProgressScreen(
                     containerColor = SoftBlue
                 )
             ) {
-
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -455,13 +407,10 @@ private fun WeeklyMoodRow(
     day: String,
     score: Int
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                vertical = 6.dp
-            )
+            .padding(vertical = 6.dp)
     ) {
 
         Row(
@@ -471,7 +420,7 @@ private fun WeeklyMoodRow(
 
             Text(
                 text = day,
-                modifier = Modifier.width(40.dp),
+                modifier = Modifier.width(45.dp),
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = DarkText
@@ -509,7 +458,6 @@ private fun ProgressStatCard(
     icon: String,
     background: Color
 ) {
-
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(20.dp),
@@ -557,7 +505,6 @@ private fun HabitRow(
     progress: Float,
     percentage: String
 ) {
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
