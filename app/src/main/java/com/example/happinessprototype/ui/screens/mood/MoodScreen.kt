@@ -43,16 +43,19 @@ private val SelectedBackground = Color(0xFFEAF4FF)
 
 @Composable
 fun MoodScreen(
-    onBack: () -> Unit = {}
+    onBack: () -> Unit = {},
+    onMoodSelected: (Int, String) -> Unit = { _, _ -> }
 ) {
-    var selectedMood by remember { mutableStateOf("") }
+    var selectedMood by remember {
+        mutableStateOf("")
+    }
 
     val moods = listOf(
-        "😄" to "Amazing",
-        "🙂" to "Good",
-        "😐" to "Okay",
-        "😔" to "Low",
-        "😢" to "Sad"
+        Triple("😄", "Amazing", 95),
+        Triple("🙂", "Good", 80),
+        Triple("😐", "Okay", 65),
+        Triple("😔", "Low", 45),
+        Triple("😢", "Sad", 30)
     )
 
     Column(
@@ -67,7 +70,9 @@ fun MoodScreen(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = onBack) {
+            IconButton(
+                onClick = onBack
+            ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",
@@ -83,9 +88,11 @@ fun MoodScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(35.dp))
+        Spacer(
+            modifier = Modifier.height(35.dp)
+        )
 
-        // Main heading
+        // Heading
         Text(
             text = "How are you feeling today?",
             fontSize = 28.sp,
@@ -93,7 +100,9 @@ fun MoodScreen(
             color = DarkText
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
 
         Text(
             text = "Take a moment to check in with yourself.",
@@ -101,25 +110,31 @@ fun MoodScreen(
             color = GrayText
         )
 
-        Spacer(modifier = Modifier.height(35.dp))
+        Spacer(
+            modifier = Modifier.height(35.dp)
+        )
 
         // Mood options
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
-            moods.forEach { (emoji, mood) ->
+            moods.forEach { (emoji, mood, score) ->
 
                 val isSelected = selectedMood == mood
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(
+                            RoundedCornerShape(20.dp)
+                        )
                         .background(
-                            if (isSelected) SelectedBackground
-                            else Color.White
+                            if (isSelected) {
+                                SelectedBackground
+                            } else {
+                                Color.White
+                            }
                         )
                         .clickable {
                             selectedMood = mood
@@ -128,26 +143,46 @@ fun MoodScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
+                    // Emoji
                     Text(
                         text = emoji,
                         modifier = Modifier
                             .size(52.dp)
                             .clip(CircleShape)
-                            .background(Color(0xFFF5F7FA))
+                            .background(
+                                Color(0xFFF5F7FA)
+                            )
                             .padding(10.dp),
                         fontSize = 27.sp
                     )
 
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Text(
-                        text = mood,
-                        modifier = Modifier.weight(1f),
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = DarkText
+                    Spacer(
+                        modifier = Modifier.width(16.dp)
                     )
 
+                    // Mood name
+                    Column(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            text = mood,
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = DarkText
+                        )
+
+                        Spacer(
+                            modifier = Modifier.height(2.dp)
+                        )
+
+                        Text(
+                            text = "Happiness score: $score",
+                            fontSize = 12.sp,
+                            color = GrayText
+                        )
+                    }
+
+                    // Selected check
                     if (isSelected) {
                         Icon(
                             imageVector = Icons.Default.Check,
@@ -159,12 +194,23 @@ fun MoodScreen(
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(
+            modifier = Modifier.weight(1f)
+        )
 
         // Continue button
         Button(
             onClick = {
-                // Later we'll save the mood
+                val selected = moods.firstOrNull {
+                    it.second == selectedMood
+                }
+
+                if (selected != null) {
+                    onMoodSelected(
+                        selected.third,
+                        selected.second
+                    )
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()

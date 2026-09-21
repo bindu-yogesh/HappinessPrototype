@@ -1,9 +1,26 @@
 package com.example.happinessprototype.ui.navigation
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 import com.example.happinessprototype.ui.screens.community.CommunityScreen
@@ -28,119 +45,264 @@ object Routes {
     const val SETTINGS = "settings"
 }
 
+data class BottomNavItem(
+    val route: String,
+    val label: String
+)
+
 @Composable
 fun AppNavigation(
     navController: NavHostController = rememberNavController()
 ) {
 
-    NavHost(
-        navController = navController,
-        startDestination = Routes.HOME
-    ) {
+    // Stores the current happiness score.
+    // Default score is 78.
+    var happinessScore by remember {
+        mutableIntStateOf(78)
+    }
 
-        // HOME
-        composable(Routes.HOME) {
-            HomeScreen(
-                onMoodClick = {
-                    navController.navigate(Routes.MOOD)
-                },
+    val bottomNavItems = listOf(
+        BottomNavItem(
+            Routes.HOME,
+            "Home"
+        ),
+        BottomNavItem(
+            Routes.WELLNESS,
+            "Wellness"
+        ),
+        BottomNavItem(
+            Routes.JOURNAL,
+            "Journal"
+        ),
+        BottomNavItem(
+            Routes.COMMUNITY,
+            "Community"
+        ),
+        BottomNavItem(
+            Routes.REWARDS,
+            "Rewards"
+        )
+    )
 
-                onWellnessClick = {
-                    navController.navigate(Routes.WELLNESS)
-                },
+    val navBackStackEntry =
+        navController.currentBackStackEntryAsState()
 
-                onJournalClick = {
-                    navController.navigate(Routes.JOURNAL)
-                },
+    val currentRoute =
+        navBackStackEntry.value?.destination?.route
 
-                onCommunityClick = {
-                    navController.navigate(Routes.COMMUNITY)
-                },
-
-                onRewardsClick = {
-                    navController.navigate(Routes.REWARDS)
-                },
-
-                onProfileClick = {
-                    navController.navigate(Routes.PROFILE)
-                }
-            )
+    val showBottomBar =
+        bottomNavItems.any {
+            it.route == currentRoute
         }
 
-        // MOOD
-        composable(Routes.MOOD) {
-            MoodScreen(
-                onBack = {
-                    navController.popBackStack()
+    Scaffold(
+        bottomBar = {
+            if (showBottomBar) {
+                NavigationBar {
+
+                    bottomNavItems.forEach { item ->
+
+                        NavigationBarItem(
+                            selected = currentRoute == item.route,
+
+                            onClick = {
+                                navController.navigate(item.route) {
+                                    popUpTo(Routes.HOME) {
+                                        saveState = true
+                                    }
+
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
+
+                            icon = {
+                                when (item.route) {
+
+                                    Routes.HOME -> {
+                                        Icon(
+                                            imageVector = Icons.Default.Home,
+                                            contentDescription = "Home"
+                                        )
+                                    }
+
+                                    Routes.WELLNESS -> {
+                                        Icon(
+                                            imageVector = Icons.Default.Favorite,
+                                            contentDescription = "Wellness"
+                                        )
+                                    }
+
+                                    Routes.JOURNAL -> {
+                                        Icon(
+                                            imageVector = Icons.Default.Edit,
+                                            contentDescription = "Journal"
+                                        )
+                                    }
+
+                                    Routes.COMMUNITY -> {
+                                        Icon(
+                                            imageVector = Icons.Default.People,
+                                            contentDescription = "Community"
+                                        )
+                                    }
+
+                                    Routes.REWARDS -> {
+                                        Icon(
+                                            imageVector = Icons.Default.Star,
+                                            contentDescription = "Rewards"
+                                        )
+                                    }
+                                }
+                            },
+
+                            label = {
+                                Text(item.label)
+                            }
+                        )
+                    }
                 }
-            )
+            }
         }
+    ) { paddingValues ->
 
-        // WELLNESS
-        composable(Routes.WELLNESS) {
-            WellnessScreen(
-                onBack = {
-                    navController.popBackStack()
-                }
+        NavHost(
+            navController = navController,
+            startDestination = Routes.HOME,
+            modifier = androidx.compose.ui.Modifier.padding(
+                paddingValues
             )
-        }
+        ) {
 
-        // JOURNAL
-        composable(Routes.JOURNAL) {
-            JournalScreen(
-                onBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
+            // HOME
+            composable(Routes.HOME) {
 
-        // PROGRESS
-        composable(Routes.PROGRESS) {
-            ProgressScreen(
-                onBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
+                HomeScreen(
+                    happinessScore = happinessScore,
 
-        // COMMUNITY
-        composable(Routes.COMMUNITY) {
-            CommunityScreen(
-                onBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
+                    onMoodClick = {
+                        navController.navigate(Routes.MOOD)
+                    },
 
-        // REWARDS
-        composable(Routes.REWARDS) {
-            RewardsScreen(
-                onBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
+                    onWellnessClick = {
+                        navController.navigate(Routes.WELLNESS)
+                    },
 
-        // PROFILE
-        composable(Routes.PROFILE) {
-            ProfileScreen(
-                onBack = {
-                    navController.popBackStack()
-                },
+                    onJournalClick = {
+                        navController.navigate(Routes.JOURNAL)
+                    },
 
-                onSettings = {
-                    navController.navigate(Routes.SETTINGS)
-                }
-            )
-        }
+                    onCommunityClick = {
+                        navController.navigate(Routes.COMMUNITY)
+                    },
 
-        // SETTINGS
-        composable(Routes.SETTINGS) {
-            SettingsScreen(
-                onBack = {
-                    navController.popBackStack()
-                }
-            )
+                    onRewardsClick = {
+                        navController.navigate(Routes.REWARDS)
+                    },
+
+                    onProfileClick = {
+                        navController.navigate(Routes.PROFILE)
+                    }
+                )
+            }
+
+            // MOOD
+            composable(Routes.MOOD) {
+
+                MoodScreen(
+
+                    onBack = {
+                        navController.popBackStack()
+                    },
+
+                    onMoodSelected = { score, _ ->
+
+                        // Update happiness score
+                        happinessScore = score
+
+                        // Go back to Home
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            // WELLNESS
+            composable(Routes.WELLNESS) {
+
+                WellnessScreen(
+                    onBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            // JOURNAL
+            composable(Routes.JOURNAL) {
+
+                JournalScreen(
+                    onBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            // PROGRESS
+            composable(Routes.PROGRESS) {
+
+                ProgressScreen(
+                    onBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            // COMMUNITY
+            composable(Routes.COMMUNITY) {
+
+                CommunityScreen(
+                    onBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            // REWARDS
+            composable(Routes.REWARDS) {
+
+                RewardsScreen(
+                    onBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            // PROFILE
+            composable(Routes.PROFILE) {
+
+                ProfileScreen(
+                    onBack = {
+                        navController.popBackStack()
+                    },
+
+                    onSettings = {
+                        navController.navigate(Routes.SETTINGS)
+                    },
+
+                    onProgress = {
+                        navController.navigate(Routes.PROGRESS)
+                    }
+                )
+            }
+
+            // SETTINGS
+            composable(Routes.SETTINGS) {
+
+                SettingsScreen(
+                    onBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
     }
 }

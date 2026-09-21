@@ -1,6 +1,7 @@
 package com.example.happinessprototype.ui.screens.profile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,7 +44,8 @@ private val SoftGreen = Color(0xFFEAF8F1)
 @Composable
 fun ProfileScreen(
     onBack: () -> Unit = {},
-    onSettings: () -> Unit = {}
+    onSettings: () -> Unit = {},
+    onProgress: () -> Unit = {}
 ) {
 
     Column(
@@ -52,15 +54,24 @@ fun ProfileScreen(
             .background(Background)
     ) {
 
-        // Top bar
+        // ---------------------------------------------------------
+        // TOP BAR
+        // ---------------------------------------------------------
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 10.dp),
+                .padding(
+                    horizontal = 12.dp,
+                    vertical = 10.dp
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            IconButton(onClick = onBack) {
+            IconButton(
+                onClick = onBack
+            ) {
+
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",
@@ -76,7 +87,10 @@ fun ProfileScreen(
                 modifier = Modifier.weight(1f)
             )
 
-            IconButton(onClick = onSettings) {
+            IconButton(
+                onClick = onSettings
+            ) {
+
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Settings",
@@ -85,24 +99,37 @@ fun ProfileScreen(
             }
         }
 
+        // ---------------------------------------------------------
+        // PROFILE CONTENT
+        // ---------------------------------------------------------
+
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+
             contentPadding = androidx.compose.foundation.layout.PaddingValues(
                 start = 20.dp,
                 end = 20.dp,
                 bottom = 30.dp
             ),
+
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
 
+            // -----------------------------------------------------
+            // PROFILE HEADER
+            // -----------------------------------------------------
+
             item {
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
 
-                // Profile header
                 Card(
                     modifier = Modifier.fillMaxWidth(),
+
                     shape = RoundedCornerShape(26.dp),
+
                     colors = CardDefaults.cardColors(
                         containerColor = Color.White
                     )
@@ -112,22 +139,27 @@ fun ProfileScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(24.dp),
+
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
                         Text(
                             text = "BY",
+
                             modifier = Modifier
                                 .size(88.dp)
                                 .clip(CircleShape)
                                 .background(SoftBlue)
                                 .padding(25.dp),
+
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = PrimaryBlue
                         )
 
-                        Spacer(modifier = Modifier.height(14.dp))
+                        Spacer(
+                            modifier = Modifier.height(14.dp)
+                        )
 
                         Text(
                             text = "Your Name",
@@ -136,7 +168,9 @@ fun ProfileScreen(
                             color = DarkText
                         )
 
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(
+                            modifier = Modifier.height(4.dp)
+                        )
 
                         Text(
                             text = "Your happiness journey",
@@ -144,7 +178,9 @@ fun ProfileScreen(
                             color = GrayText
                         )
 
-                        Spacer(modifier = Modifier.height(15.dp))
+                        Spacer(
+                            modifier = Modifier.height(15.dp)
+                        )
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically
@@ -157,7 +193,9 @@ fun ProfileScreen(
                                 modifier = Modifier.size(16.dp)
                             )
 
-                            Spacer(modifier = Modifier.width(5.dp))
+                            Spacer(
+                                modifier = Modifier.width(5.dp)
+                            )
 
                             Text(
                                 text = "Edit Profile",
@@ -170,6 +208,10 @@ fun ProfileScreen(
                 }
             }
 
+            // -----------------------------------------------------
+            // OVERVIEW TITLE
+            // -----------------------------------------------------
+
             item {
 
                 Text(
@@ -180,11 +222,17 @@ fun ProfileScreen(
                 )
             }
 
+            // -----------------------------------------------------
+            // STATISTICS
+            // -----------------------------------------------------
+
             item {
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+
+                    horizontalArrangement =
+                        Arrangement.spacedBy(12.dp)
                 ) {
 
                     ProfileStat(
@@ -210,6 +258,10 @@ fun ProfileScreen(
                 }
             }
 
+            // -----------------------------------------------------
+            // ACCOUNT TITLE
+            // -----------------------------------------------------
+
             item {
 
                 Text(
@@ -220,11 +272,17 @@ fun ProfileScreen(
                 )
             }
 
+            // -----------------------------------------------------
+            // ACCOUNT MENU
+            // -----------------------------------------------------
+
             item {
 
                 Card(
                     modifier = Modifier.fillMaxWidth(),
+
                     shape = RoundedCornerShape(22.dp),
+
                     colors = CardDefaults.cardColors(
                         containerColor = Color.White
                     )
@@ -232,22 +290,30 @@ fun ProfileScreen(
 
                     Column {
 
+                        // ACHIEVEMENTS
+
                         ProfileMenuItem(
                             icon = "🏆",
                             title = "My Achievements",
                             subtitle = "View your milestones"
                         )
 
+                        // PROGRESS
+
                         ProfileMenuItem(
                             icon = "📊",
                             title = "My Progress",
-                            subtitle = "Track your happiness journey"
+                            subtitle = "Track your happiness journey",
+                            onClick = onProgress
                         )
+
+                        // SETTINGS
 
                         ProfileMenuItem(
                             icon = "⚙️",
                             title = "Settings",
-                            subtitle = "Manage your preferences"
+                            subtitle = "Manage your preferences",
+                            onClick = onSettings
                         )
                     }
                 }
@@ -266,7 +332,9 @@ private fun ProfileStat(
 
     Card(
         modifier = modifier,
+
         shape = RoundedCornerShape(18.dp),
+
         colors = CardDefaults.cardColors(
             containerColor = background
         )
@@ -276,6 +344,7 @@ private fun ProfileStat(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
+
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -286,7 +355,9 @@ private fun ProfileStat(
                 color = DarkText
             )
 
-            Spacer(modifier = Modifier.height(3.dp))
+            Spacer(
+                modifier = Modifier.height(3.dp)
+            )
 
             Text(
                 text = title,
@@ -301,16 +372,21 @@ private fun ProfileStat(
 private fun ProfileMenuItem(
     icon: String,
     title: String,
-    subtitle: String
+    subtitle: String,
+    onClick: () -> Unit = {}
 ) {
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
             .padding(
                 horizontal = 18.dp,
                 vertical = 16.dp
             ),
+
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -319,7 +395,9 @@ private fun ProfileMenuItem(
             fontSize = 23.sp
         )
 
-        Spacer(modifier = Modifier.width(15.dp))
+        Spacer(
+            modifier = Modifier.width(15.dp)
+        )
 
         Column(
             modifier = Modifier.weight(1f)
